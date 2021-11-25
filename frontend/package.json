@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "author": "Hasuzawa Yuichi",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.2",

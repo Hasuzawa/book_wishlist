@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  //shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  id            Int           @id  @default(autoincrement())
+  username      String        @unique
+  password      String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  books         BookEntry[]
+}
+
+model BookEntry {
+  id            Int           @id
+  user          User          @relation(fields: [userId],references: [id])
+  userId        Int
+  name          String        @db.VarChar(255)
+  author        String?       @db.VarChar(255)
+  description   String?       @db.VarChar(1023)
+  read          Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
