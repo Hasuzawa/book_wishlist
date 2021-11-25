@@ -1,17 +1,21 @@
 ## React & Express app with GraphQL and Prisma
 
-Classic MERN app with a modern twists, instead of REST API and ORM, GraphQL and Prisma are used.
+Classic MERN app with modern twists, instead of REST API and ORM/SQL abstraction, GraphQL and Prisma are used.
 
 ## Blueplan
 <details open>
 Take a look at the package.json inside frontend and backend to see all the dependencies.
 But I will highlight some crucial inclusions here.
 
+| Frontend         |            |
+|------------------|------------|
+| frontend framework | React |
+
 
 | Backend          |            |
 |------------------|------------|
-| server framework | node.js    |
-| routing          | express.js |
+| backend framework| node.js    |
+| HTTP, routing    | express.js |
 | database         | MongoDB    |
 | API              | graphql    |
 | ORM              | prisma     |
@@ -25,7 +29,7 @@ But I will highlight some crucial inclusions here.
 
 <ul>
     <li>
-        Login system.
+        Both backend and frontend are up and running.
     </li>
     <li>
         Prisma schema.

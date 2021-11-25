@@ -1,12 +1,12 @@
 import express from "express";
 
 
-const port = 4000;
+const port = 8000;
 
 const app = express();
 
-app.get("/", () => {
-    return "Hello World";
+app.get("/", (req, res) => {
+    res.status(200).send("<h1>backend started</h1>")
 })
 
 
