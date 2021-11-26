@@ -23,6 +23,7 @@ But I will highlight some crucial inclusions here.
 | API              | graphql    |
 | ORM              | prisma     |
 | authentication   | passport.js|
+| GraphQL utils | graphql-tools, graphql-codegen |
 
 </open>
 

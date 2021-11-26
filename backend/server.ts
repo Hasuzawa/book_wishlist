@@ -1,32 +1,11 @@
 import express from "express";
-import { graphqlHTTP } from "express-graphql"
-import { buildSchema, GraphQLSchema } from "graphql"
 
-import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
-import { loadSchemaSync } from "@graphql-tools/load"
 //import { Loader } from "@graphql-tools/utils/loaders"
 import { makeExecutableSchema } from "@graphql-tools/schema/makeExecutableSchema"
 //const GraphqlFile
 
+import graphqlHttpMiddleware from "./graphql/graphqlHttp"
 
-//ad-hoc schema and resolver
-// const schema: GraphQLSchema = buildSchema(`
-//   type Query {
-//     hello: String
-//   }
-// `);
-
-const schema: GraphQLSchema = loadSchemaSync("./graphql/schema.graphql", {
-    loaders: [new GraphQLFileLoader]
-})
-
-
-const root = {
-    hello: () => {
-      return 'Hello world!';
-    },
-  };
-//
 
 const port = process.env.PORT ?? 7000;      // better than ||
 
@@ -38,11 +17,7 @@ app.get("/", (req, res) => {
 
 
 
-app.use("/graphql", graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-}))
+app.use("/graphql", graphqlHttpMiddleware)
 
 
 

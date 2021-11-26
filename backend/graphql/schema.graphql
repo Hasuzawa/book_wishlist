@@ -5,6 +5,7 @@ type User {
     books: [BookEntry]!
 }
 
+
 type BookEntry {
     id: ID!
     name: String!
@@ -12,7 +13,6 @@ type BookEntry {
     description: String
     read: Boolean
 }
-
 
 
 type Query {
@@ -36,8 +36,6 @@ type Mutation {
         username: String,
         password: String
     ): User
-
-    # updateUser
 
     createBookEntry(input: BookEntryInput): BookEntry
 
