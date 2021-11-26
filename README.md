@@ -4,7 +4,7 @@ Classic MERN app with some modern twists, instead of REST API and ORM/SQL abstra
 
 ## Blueplan
 <details open>
-Take a look at the package.json inside frontend and backend to see all the dependencies.
+Take a look at the package.json(s) inside frontend and backend to see all the dependencies.
 But I will highlight some crucial inclusions here.
 
 <img src="./public/system_architecture.svg" alt="The system architecture of the app">
