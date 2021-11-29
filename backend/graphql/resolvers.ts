@@ -12,40 +12,59 @@ interface GqlContext {
 const resolvers = {
     Query: {
         getUserById: async (parent: any, args: any, context: any, info: any) => {
+            //console.log("GraphQL context is: ", context)
             //context.prisma
             let id: number = parseInt(args.id);
-            let password: string = args.password;
-            if (isNaN(id)) {
-                //BAD_USER_INPUT
-            }
+            const user = await context.prisma.user.findUnique({
+                select: {
+                    username: true,
+                    password: true
+                },
+                where: {
+                    id: id
+                }
+            })
+            console.log(user)
+            return user;
 
-            try {
-                const user = await prisma.user.findUnique({
-                    select: {
-                        username: true,
-                        password: true,
-                    },
-                    where: {
-                        id: id
-                    }
-                })
-                console.log(user)
-                if (!user) {
-                    console.log("User does not exist")
-                } else {
-                    if (password === user.password && password === user.password) {
-                        console.log("successful login")
-                    }
-                }
-            } catch (e) {
-                if (e instanceof Prisma.PrismaClientKnownRequestError) {
-                    if (e.code === "P2002") {
-                        console.log(
-                          'There is a unique constraint violation, a new user cannot be created with this email'
-                        )
-                    }
-                }
-            }
+
+
+
+
+
+
+            // let password: string = args.password;
+            // if (isNaN(id)) {
+            //     //BAD_USER_INPUT
+            // }
+
+            // try {
+            //     const user = await context.prisma.user.findUnique({
+            //         select: {
+            //             username: true,
+            //             password: true,
+            //         },
+            //         where: {
+            //             id: id
+            //         }
+            //     })
+            //     console.log(user)
+            //     if (!user) {
+            //         console.log("User does not exist")
+            //     } else {
+            //         if (password === user.password && password === user.password) {
+            //             console.log("successful login")
+            //         }
+            //     }
+            // } catch (e) {
+            //     if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            //         if (e.code === "P2002") {
+            //             console.log(
+            //               'There is a unique constraint violation, a new user cannot be created with this email'
+            //             )
+            //         }
+            //     }
+            // }
         },
         getBookEntryById: (parent: any, args: any, context: any, info: any) => {
             const { id } = args;
@@ -56,22 +75,40 @@ const resolvers = {
             })
             return bookEntry
         },
-        login: () => {
-            //testing
-            return 1;
-        }
     },
     Mutation: {
-        createUser: () => {
+        login: () => {
 
         },
+        logout: (parent: any, context: any) => {
+            context.logout()
+        },
+
+        createUser: async (parent: any , args: any, context: any, info: any) => {
+            console.log("createUser mutation args: ", args)
+            const { username, password } = args;
+            //try {
+                const user = await context.prisma.user.create({
+                    data: {
+                        username: username,
+                        password: password,
+                    }
+                })
+                return user;
+            // } catch (e) {
+            //     return "error happened"
+            // }
+        },
+
         createBookEntry: () => {
 
         },
+        
         updateBookEntry: () => {
 
         }
     }
 }
+
 
 export default resolvers

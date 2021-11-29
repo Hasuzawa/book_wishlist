@@ -18,7 +18,6 @@ type BookEntry {
 type Query {
     getUserById(id: ID!): User
     getBookEntryById(id: ID!): BookEntry
-    login(username: String!, password: String!): User
 }
 
 
@@ -31,6 +30,13 @@ input BookEntryInput {
 
 
 type Mutation {
+    login(
+        username: String!,
+        password: String!
+    ): User
+    logout: Boolean
+
+
     createUser(
         username: String,
         password: String
