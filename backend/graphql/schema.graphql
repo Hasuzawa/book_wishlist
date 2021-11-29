@@ -16,9 +16,8 @@ type BookEntry {
 
 
 type Query {
-    getUserById(id: ID): User                  
-    getBookEntryById(id: ID): BookEntry
-
+    getUserById(id: ID!): User
+    getBookEntryById(id: ID!): BookEntry
     login(username: String!, password: String!): User
 }
 

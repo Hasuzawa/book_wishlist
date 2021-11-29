@@ -2,7 +2,7 @@ import { graphqlHTTP } from "express-graphql"
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadSchemaSync } from "@graphql-tools/load"
 import { GraphQLSchema } from "graphql"
-import { makeExecutableSchema } from "@graphql-tools/schema"
+import { makeExecutableSchema, addResolversToSchema } from "@graphql-tools/schema"
 import prisma from "../prisma/prisma"
 import path from "path"
 import resolvers from "./resolvers"
@@ -14,6 +14,7 @@ const schema: GraphQLSchema = loadSchemaSync(path.resolve(__dirname, "./schema.g
     loaders: [new GraphQLFileLoader]
 })
 
+const schemaWithResolvers: GraphQLSchema = addResolversToSchema(schema, resolvers)
 
 
 const root = {
@@ -27,10 +28,11 @@ const context = {
 }
 
 const graphqlHttpMiddleware = graphqlHTTP({
-    schema: schema,
+    schema: schemaWithResolvers,
     context: context,
     rootValue: root,
     graphiql: true,
 })
 
 export default graphqlHttpMiddleware
+export { schema }

@@ -41,6 +41,9 @@ But I will highlight some crucial inclusions here.
     <li>
         Migrated local PostgreSQL databse. Pretty similar to what Django do.
     </li>
+    <li>
+        Set up schema and resolvers. Successfully queried by GraphQL and prisma. But most of the time is actually spent on configuring path, fixing dependency and typing.
+    </li>
 </ul>
 
 </details>
