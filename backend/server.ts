@@ -15,8 +15,7 @@ const PORT = process.env.PORT ?? 7000;      // better than ||
 const SESSION_SECRET = "ajhweoi89df7fv938u489tvofawhvr89syzair3kjfo831op10djgnabw4";
 
 
-// ~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!! //
-async function startApolloServer() {
+(async function startApolloServer() {
 
     const app = express();
 
@@ -46,7 +45,6 @@ async function startApolloServer() {
     app.listen(PORT, () => {
         console.log(`server started at ${PORT}`)
     })
-
-}
-
-startApolloServer();
+    
+})();
+// this is a immediately-invoked function expression

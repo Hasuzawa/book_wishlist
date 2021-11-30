@@ -2,6 +2,7 @@ import prisma from "../prisma/prisma"
 import { Resolvers } from "src/generated/graphql"
 import { PrismaClient } from "@prisma/client"
 import { Prisma } from "@prisma/client"
+import { AuthenticationError, UserInputError, ValidationError  } from "apollo-server-express"
 
 
 interface GqlContext {
@@ -15,22 +16,24 @@ const resolvers = {
             //console.log("GraphQL context is: ", context)
             //context.prisma
             let id: number = parseInt(args.id);
+            if (isNaN(id)) {
+                throw new UserInputError("Input is not a number")
+            }
             const user = await context.prisma.user.findUnique({
                 select: {
                     username: true,
-                    password: true
+                    password: true,
+                    books: true
                 },
                 where: {
                     id: id
                 }
             })
+            if (!user) {
+                throw new ValidationError("User does not exists.")
+            }
             console.log(user)
             return user;
-
-
-
-
-
 
 
             // let password: string = args.password;
@@ -66,20 +69,43 @@ const resolvers = {
             //     }
             // }
         },
-        getBookEntryById: (parent: any, args: any, context: any, info: any) => {
+        getBookEntryById: async (parent: any, args: any, context: any, info: any) => {
             const { id } = args;
-            const bookEntry = prisma.bookEntry.findUnique({
+            const bookEntry = await context.prisma.bookEntry.findUnique({
                 where: {
                     id: id
                 }
             })
+            if (!bookEntry) {
+                throw new ValidationError("Book does not exists.")
+            }
             return bookEntry
         },
     },
-    Mutation: {
-        login: () => {
 
+    Mutation: {
+        login: async (parent: any, args: any, context: any) => {
+            const { username, password } = args;
+            const user = await context.prisma.user.findUnique({
+                select: {
+                    username,
+                    password
+                },
+                where: {
+                    username: username
+                }
+            })
+            if (!user) {
+                throw new ValidationError("User does not exists.")
+            }
+            if (username === user.username && password === user.password) {
+                console.log("login success")
+                return true
+            } else {
+                throw new AuthenticationError("Incorrect password.")
+            }
         },
+
         logout: (parent: any, context: any) => {
             context.logout()
         },
@@ -87,7 +113,7 @@ const resolvers = {
         createUser: async (parent: any , args: any, context: any, info: any) => {
             console.log("createUser mutation args: ", args)
             const { username, password } = args;
-            //try {
+            try {
                 const user = await context.prisma.user.create({
                     data: {
                         username: username,
@@ -95,12 +121,36 @@ const resolvers = {
                     }
                 })
                 return user;
-            // } catch (e) {
-            //     return "error happened"
-            // }
+            } catch (e) {
+                if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                    switch(e.code) {
+                        case "P2002": throw new ValidationError("Username is already registered.");
+                        default: throw new Error("Unknown prisma error");
+                    }
+                }
+                throw new Error("Unknown error")
+            }
         },
 
-        createBookEntry: () => {
+        createBookEntry: async (parent: any, args: any, context: any, info: any) => {
+            let { name, author, description, read } = args;
+            author ??= "";
+            description ??= "";
+            const userId = context.getUser().id;
+            try {
+                const bookEntry = await context.prisma.bookEntry.create({
+                    data: {
+                        userId: userId,
+                        name: name,
+                        author: author,
+                        description: description,
+                        read: read
+                    }
+                })
+                return bookEntry
+            } catch (e) {
+
+            }
 
         },
         

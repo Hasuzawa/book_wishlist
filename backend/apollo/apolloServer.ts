@@ -12,7 +12,6 @@ const schemaWithResolvers: GraphQLSchema = addResolversToSchema(schema, resolver
 //: ApolloServer<ExpressContext>
 const apolloServer = new ApolloServer({
     schema: schemaWithResolvers,
-    //resolvers: resolvers,
     context: ({req}) => {               // remember these are available for every resolver
         //console.info("req in context is:", req);
         return {

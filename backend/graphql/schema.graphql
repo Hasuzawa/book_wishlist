@@ -38,8 +38,8 @@ type Mutation {
 
 
     createUser(
-        username: String,
-        password: String
+        username: String!,
+        password: String!
     ): User
 
     createBookEntry(input: BookEntryInput): BookEntry
